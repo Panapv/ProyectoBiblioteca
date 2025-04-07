@@ -9,18 +9,14 @@
 
 <body>
     <h1 id="title"></h1>
-    <table>
+    <table border="1">
         <tbody id="game">
-
+            <tr id="headers"></tr>
         </tbody>
     </table>
 </body>
 <script src="verbos.js"></script>
-<script>
-    let arrVerbos = getVerbos();
 
-    game01(arrVerbos);
-</script>
 <?php
 if (isset($_GET["btnForm"]) && $_SERVER["REQUEST_METHOD"] === "GET") {
     $title = $_GET["btnForm"];
@@ -38,5 +34,11 @@ if (isset($_GET["btnForm"]) && $_SERVER["REQUEST_METHOD"] === "GET") {
     }
 }
 ?>
+<script>
+    let arrVerbos = getVerbos();
+
+    game01(arrVerbos, toGuess, model);
+</script>
+
 
 </html>

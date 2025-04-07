@@ -130,28 +130,48 @@ function getVerbos(n = 5) {
     return arr;
 }
 
-function game01(verbos = [], model = ["inf", "present", "past"], verb = "spanish") {
-    let table = document.getElementById("game");
 
-    // Generamos las cabeceras
-    let title = document.createElement("tr");
-    for (let i = 0; i < model.length; i++) {
-        let th = document.createElement("th");
-        let verbTense = model[i];
-        th.innerText = verbTense;
-        title.appendChild(th);
+function addTableRow(parentNode, elementClass, array = []){
+    for (let value of array){
+        let element = document.createElement(elementClass);
+        element.innerText = value;
+        parentNode.appendChild(element);
     }
-    table.appendChild(title);
+    return parentNode;
+}
 
-    // Generamos el resto de campos
-    for (let values of verbos) {
+function game01(arrVerbos = [], toGuess = ["inf", "present", "past"], model = "spanish") {
+
+    // Generamos Cabeceras
+    let tr = document.getElementById("headers");
+    for (let header of [model, ...toGuess]) {
+        let th = document.createElement("th");
+        th.innerText = header;
+        tr.appendChild(th);
+    }
+
+    // Generamos el verbo a traducir
+    let table = document.getElementById("game");
+    for (let i = 0; i < arrVerbos.length; i++){
         let tr = document.createElement("tr");
-        for (let i = 0; i < model.length; i++) {
+        tr.setAttribute("name", arrVerbos[i][model]);
+        tr.setAttribute("id", arrVerbos[i][model]);
+        let td = document.createElement("td");
+        td.setAttribute("name", model);
+        td.innerText = arrVerbos[i][model];
+        tr.appendChild(td);
+        table.appendChild(tr);
+    }
+
+    // Generamos los campos que el usuario tendrá que completar
+    for (let i = 0; i < arrVerbos.length; i++){
+        for (let j = 0; j < toGuess.length; j++){
+            let tr = document.getElementById(arrVerbos[i][model]);
             let td = document.createElement("td");
-            let verbTense = model[i];
-            td.innerText = values[verbTense];
+            td.setAttribute("name", toGuess[j]);
+            td.innerText = arrVerbos[i][toGuess[j]];
+            console.log(tr);
             tr.appendChild(td);
         }
-        table.appendChild(tr);
     }
 }
