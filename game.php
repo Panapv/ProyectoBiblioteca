@@ -8,12 +8,13 @@
 </head>
 
 <body>
-    <h1 id="title"></h1>
-    <table border="1">
-        <tbody id="game">
-            <tr id="headers"></tr>
-        </tbody>
-    </table>
+    <form action="" method="GET">
+        <h1 id="title"></h1>
+        <table border="1">
+            <tbody id="game">
+            </tbody>
+        </table>
+    </form>
 </body>
 <script src="verbos.js"></script>
 
@@ -37,7 +38,8 @@ if (isset($_GET["btnForm"]) && $_SERVER["REQUEST_METHOD"] === "GET") {
 <script>
     let arrVerbos = getVerbos();
 
-    game01(arrVerbos, toGuess, model);
+    //game01(arrVerbos, toGuess, model);
+    game02(arrVerbos, toGuess, model);
 </script>
 
 

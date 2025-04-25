@@ -120,10 +120,10 @@ const verbos = [
 ];
 
 function getVerbos(n = 5) {
-    let arr = new Array();
-    while (arr.length < 5) {
-        let rand = Math.floor(Math.random() * 119);
-        if (!arr.includes(verbos[rand])) {
+    let arr = [];
+    while (arr.length < n) {
+        let rand = Math.floor(Math.random() * verbos.length);
+        if (verbos[rand] && !arr.includes(verbos[rand])) {
             arr.push(verbos[rand]);
         }
     }
@@ -131,8 +131,9 @@ function getVerbos(n = 5) {
 }
 
 
-function addTableRow(parentNode, elementClass, array = []){
-    for (let value of array){
+
+function addTableRow(parentNode, elementClass, array = []) {
+    for (let value of array) {
         let element = document.createElement(elementClass);
         element.innerText = value;
         parentNode.appendChild(element);
@@ -140,38 +141,113 @@ function addTableRow(parentNode, elementClass, array = []){
     return parentNode;
 }
 
-function game01(arrVerbos = [], toGuess = ["inf", "present", "past"], model = "spanish") {
-
-    // Generamos Cabeceras
-    let tr = document.getElementById("headers");
+function printCabeceras(model, toGuess) {
+    let table = document.getElementById("game");
+    let tr = document.createElement("tr");
     for (let header of [model, ...toGuess]) {
         let th = document.createElement("th");
         th.innerText = header;
         tr.appendChild(th);
     }
+    table.appendChild(tr);
+}
 
-    // Generamos el verbo a traducir
+function game01(arrVerbos = [], toGuess = ["inf", "present", "past"], model = "spanish") {
+    // Generamos Cabeceras
+    printCabeceras(model, toGuess);
+
+    // Generamos los verbos y sus formas verbales
+    printVerbos(arrVerbos, toGuess, model);
+}
+
+function printVerbos(arrVerbos, toGuess, model) {
     let table = document.getElementById("game");
-    for (let i = 0; i < arrVerbos.length; i++){
+    for (let i = 0; i < arrVerbos.length; i++) {
+        // Creamos el verbo a traducir
         let tr = document.createElement("tr");
         tr.setAttribute("name", arrVerbos[i][model]);
         tr.setAttribute("id", arrVerbos[i][model]);
-        let td = document.createElement("td");
-        td.setAttribute("name", model);
-        td.innerText = arrVerbos[i][model];
-        tr.appendChild(td);
-        table.appendChild(tr);
-    }
-
-    // Generamos los campos que el usuario tendrá que completar
-    for (let i = 0; i < arrVerbos.length; i++){
-        for (let j = 0; j < toGuess.length; j++){
-            let tr = document.getElementById(arrVerbos[i][model]);
+        // Dentro de cada fila, creamos las celdas correspondientes a cada forma verbal
+        for (let forma of [model, ...toGuess]) {
             let td = document.createElement("td");
-            td.setAttribute("name", toGuess[j]);
-            td.innerText = arrVerbos[i][toGuess[j]];
-            console.log(tr);
+            td.setAttribute("name", forma);
+            if (forma == model) {
+                td.innerText = arrVerbos[i][forma];
+            } else {
+                let input = document.createElement("input");
+                input.setAttribute("type", "text");
+                // Generamos un evento que compruebe que la respuesta es correcta
+                input.addEventListener("focusout", (event) => {
+                    let response = event.target.value;
+                    if (!response == "") {
+                        if (response == arrVerbos[i][forma]) {
+                            event.target.style.background = "lightgreen";
+                        } else {
+                            event.target.style.background = "red";
+                        }
+                    }
+                });
+                td.appendChild(input);
+            }
             tr.appendChild(td);
         }
+        table.appendChild(tr);
+    }
+}
+
+function generateRandomOrderVerb(arrVerbos, forma) {
+
+}
+
+function game02(arrVerbos = [], toGuess = ["inf", "present", "past"], model) {
+    //printCabeceras(model, toGuess);
+
+    let table = document.getElementById("game");
+
+    for (let i = 0; i < arrVerbos.length; i++) {
+        let tr = document.createElement("tr");
+        for (let formaVerbal of [model, ...toGuess]) {
+            let td = document.createElement("td");
+            let used = [];
+            let verboRandom = "";
+            do {
+                verboRandom = Math.floor(Math.random() * arrVerbos.length);
+                console.log(used);
+            } while (used.includes(verboRandom));
+            used.push(verboRandom);
+            
+            td.innerText =  arrVerbos[verboRandom][formaVerbal];
+            tr.appendChild(td);
+        }
+        table.appendChild(tr);
+    }
+}
+
+function game02b(arrVerbos = [], toGuess = ["inf", "present", "past"], model) {
+    let used = [];
+    let table = document.getElementById("game");
+
+    for (let i = 0; i < arrVerbos.length; i++) {
+        let tr = document.createElement("tr");
+        for (let verbo of toGuess) {
+            let td = document.createElement("td");
+            let valid = false;
+            while (!valid) {
+                // Escogemos un verbo y su forma verbal de manera aleatoria.
+                let verboRandom = Math.floor(Math.random() * arrVerbos.length);
+                let formaRandom = toGuess[Math.floor(Math.random() * toGuess.length)];
+
+                let str = `${formaRandom}-${verboRandom}`;
+                console.log(str);
+                //Comprobamos si esa combinación ya está presente
+                if (!used.includes(str)) {
+                    used.push(str);
+                    td.innerText = arrVerbos[verboRandom][formaRandom];
+                    valid = true;
+                    tr.appendChild(td);
+                }
+            }
+        }
+        table.appendChild(tr);
     }
 }
