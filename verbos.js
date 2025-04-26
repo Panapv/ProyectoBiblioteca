@@ -130,8 +130,6 @@ function getVerbos(n = 5) {
     return arr;
 }
 
-
-
 function addTableRow(parentNode, elementClass, array = []) {
     for (let value of array) {
         let element = document.createElement(elementClass);
@@ -195,58 +193,59 @@ function printVerbos(arrVerbos, toGuess, model) {
     }
 }
 
-function generateRandomOrderVerb(arrVerbos, forma) {
-
+function printInput(arrIDs, color){
+    for (let id of arrIDs) {
+        document.getElementById(id).style.background = color;
+    }
 }
 
 function game02(arrVerbos = [], toGuess = ["inf", "present", "past"], model) {
-    //printCabeceras(model, toGuess);
+    printCabeceras(model, toGuess);
+
+    let current = [];
+    let inputIDs = [];
 
     let table = document.getElementById("game");
-
+    let used = [];
     for (let i = 0; i < arrVerbos.length; i++) {
         let tr = document.createElement("tr");
         for (let formaVerbal of [model, ...toGuess]) {
             let td = document.createElement("td");
-            let used = [];
             let verboRandom = "";
             do {
                 verboRandom = Math.floor(Math.random() * arrVerbos.length);
-                console.log(used);
-            } while (used.includes(verboRandom));
-            used.push(verboRandom);
-            
-            td.innerText =  arrVerbos[verboRandom][formaVerbal];
-            tr.appendChild(td);
-        }
-        table.appendChild(tr);
-    }
-}
+            } while (used.includes(`${formaVerbal}-${verboRandom}`));
+            used.push(`${formaVerbal}-${verboRandom}`);
 
-function game02b(arrVerbos = [], toGuess = ["inf", "present", "past"], model) {
-    let used = [];
-    let table = document.getElementById("game");
+            let input = document.createElement("input");
+            input.setAttribute("type", "button");
+            input.setAttribute("value", arrVerbos[verboRandom][formaVerbal]);
+            input.setAttribute("id", `${formaVerbal}-${arrVerbos[verboRandom][formaVerbal]}`);
+            td.appendChild(input);
 
-    for (let i = 0; i < arrVerbos.length; i++) {
-        let tr = document.createElement("tr");
-        for (let verbo of toGuess) {
-            let td = document.createElement("td");
-            let valid = false;
-            while (!valid) {
-                // Escogemos un verbo y su forma verbal de manera aleatoria.
-                let verboRandom = Math.floor(Math.random() * arrVerbos.length);
-                let formaRandom = toGuess[Math.floor(Math.random() * toGuess.length)];
+            // Generamos el evento para relacionar los botones de las columnas.
+            input.addEventListener("click", (event) => {
+                event.target.style.background = 'lightblue';
+                current.push(arrVerbos[verboRandom]["num"]);
+                inputIDs.push(`${formaVerbal}-${arrVerbos[verboRandom][formaVerbal]}`);
 
-                let str = `${formaRandom}-${verboRandom}`;
-                console.log(str);
-                //Comprobamos si esa combinación ya está presente
-                if (!used.includes(str)) {
-                    used.push(str);
-                    td.innerText = arrVerbos[verboRandom][formaRandom];
-                    valid = true;
-                    tr.appendChild(td);
+                console.log(current);
+                console.log(`${arrVerbos[verboRandom][formaVerbal]} agregado`);
+
+                if (current.length == [model, ...toGuess].length) {
+                    if (current.every(a => a === current[0])) {
+                        printInput(inputIDs, "lightgreen");
+                        console.log('Has acertado');
+                    } else {
+                        printInput(inputIDs, "lightgrey");
+                        console.log('Has fallado');
+                    }
+                    current = [];
+                    inputIDs = [];
                 }
-            }
+            });
+
+            tr.appendChild(td);
         }
         table.appendChild(tr);
     }
