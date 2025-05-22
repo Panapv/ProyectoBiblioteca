@@ -138,7 +138,7 @@ function Game01({ arrVerbos = [], toGuess = ["inf", "present", "past"] }) {
 
   const handleResponse = (event, verbIndex, verbForm) => {
     let responseValue = event.target.value.trim().toLowerCase();
-    if(responseValue != ''){
+    if (responseValue != '') {
       event.target.style.background = (arrVerbos[verbIndex][verbForm] == responseValue) ? 'lightgreen' : 'red';
     }
   }
@@ -146,9 +146,11 @@ function Game01({ arrVerbos = [], toGuess = ["inf", "present", "past"] }) {
     <>
       <table border={1}>
         <thead>
-          {toGuess.map((formaVerbal) => (
-            <th>{formaVerbal}</th>
-          ))}
+          <tr>
+            {toGuess.map((formaVerbal) => (
+              <th>{formaVerbal}</th>
+            ))}
+          </tr>
         </thead>
 
         <tbody>
@@ -156,8 +158,8 @@ function Game01({ arrVerbos = [], toGuess = ["inf", "present", "past"] }) {
           (<tr key={verbo['num']}>
             {toGuess.map((formaVerbal) => (
               <td key={formaVerbal}>
-              {toGuess.indexOf(formaVerbal) == 0 ? verbo[formaVerbal]:
-              (<input type='text' onBlur={(event)=>handleResponse(event, index, formaVerbal)}></input>)}
+                {toGuess.indexOf(formaVerbal) == 0 ? verbo[formaVerbal] :
+                  (<input type='text' onBlur={(event) => handleResponse(event, index, formaVerbal)}></input>)}
               </td>
             ))}
           </tr>))
@@ -168,11 +170,82 @@ function Game01({ arrVerbos = [], toGuess = ["inf", "present", "past"] }) {
   );
 }
 
-function Game02({ arrVerbos = [], toGuess = ["spanish", "inf", "present", "past"] }) {
+function shuffleArray(array, formaVerbal, shuffled = []) {
+  while (true) {
+    let rand = Math.floor(Math.random() * array.length);
+    if (!shuffled.includes(array[rand][formaVerbal])) {
+      return (array[rand]);
+    }
+  }
+}
 
+function getVerbForm(arrVerbos = [], formasVerbales = []) {
+  let verbos = [];
+  for (const verbo of arrVerbos) {
+    let entrie = {};
+    formasVerbales.forEach((forma) => {
+      entrie[forma] = verbo[forma];
+    })
+    entrie['num'] = verbo['num'];
+    verbos.push(entrie);
+  }
+  return verbos;
+}
+
+function isCorrect(arrVerbos = [], response = {}, formas = ["spanish", "inf", "present", "past"]) {
+  for (const verbo of arrVerbos) {
+    let bool = [];
+    formas.forEach(formaVerbal => {
+      bool.push(verbo[formaVerbal] == response[formaVerbal]);
+    });
+    if (bool.every((a) => a == true)) return true;
+  }
+  return false;
+}
+
+function Game02({ arrVerbos = [], toGuess = ["spanish", "inf", "present", "past"] }) {
+  let response = {};
+  let arrEvents = [];
+
+  const handleResponse = (event, verbo, formaVerbal) => {
+    event.target.style.background = 'lightblue';
+    response[formaVerbal] = verbo[formaVerbal];
+    arrEvents.push(event);
+    if (Object.values(response).length == toGuess.length) {
+      arrEvents.map((value)=> value.target.style.background = isCorrect(arrVerbos, response, toGuess) ? 'lightgreen' : 'red');
+      response = {};
+      arrEvents = [];
+    }
+  }
+
+  let shuffled = [];
   return (
-    <table>
-      
+    <table border={1}>
+      <thead>
+        <tr>
+          {toGuess.map((formaVerbal) => (
+            <th key={formaVerbal}>{formaVerbal}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {
+          arrVerbos.map((_, index) => {
+            return (<tr>
+              {toGuess.map((formaVerbal) => {
+                const verbo = shuffleArray(arrVerbos, formaVerbal, shuffled);
+                shuffled.push(verbo[formaVerbal]);
+                return (<td key={verbo['num'] + verbo[formaVerbal]}>
+                  <button onClick={(event) => handleResponse(event, verbo, formaVerbal)} value={verbo[formaVerbal]}>{verbo[formaVerbal]}</button>
+                </td>
+                );
+              })
+              }
+            </tr>
+            )
+          })
+        }
+      </tbody>
     </table>
   );
 }
@@ -181,7 +254,7 @@ function GameHeader({ onChangeMinigame, onRestart, onBack }) {
   return (
     <div>
       <button onClick={() => onChangeMinigame()}>Cambiar Minijuego</button>
-      <button onClick={() => onRestart()}>Empezar de nuevo</button>
+      <button onClick={() => onRestart()}>Reiniciar</button>
       <button onClick={() => onBack(null)}>Volver al Menú</button>
     </div>
   );
@@ -192,7 +265,7 @@ function GameScreen({ form, onBack }) {
   const handleMinigame = () => setMinigame((minigame == 1) ? 2 : 1);
 
   const [gameKey, setGameKey] = useState(0);
-  const handleGameKey = () => setGameKey(prev=>prev+1);
+  const handleGameKey = () => setGameKey(prev => prev + 1);
 
   let formVerbs;
 
@@ -207,12 +280,12 @@ function GameScreen({ form, onBack }) {
       formVerbs = ['spanish', 'inf', 'present', 'past'];
       break;
   }
-
+  let arrVerbos = getVerbForm(getVerbos(), formVerbs);
   return (
     <>
       <h1>{form}</h1>
       <GameHeader onChangeMinigame={handleMinigame} onRestart={handleGameKey} onBack={onBack} />
-      {(minigame == 1) ? <Game01 arrVerbos={getVerbos()} toGuess={formVerbs} key={gameKey}/> : <Game02 arrVerbos={getVerbos()} toGuess={formVerbs} key={gameKey}/>}
+      {(minigame == 1) ? <Game01 arrVerbos={arrVerbos} toGuess={formVerbs} key={gameKey} /> : <Game02 arrVerbos={arrVerbos} toGuess={formVerbs} key={gameKey} />}
     </>
   );
 }
