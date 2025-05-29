@@ -293,12 +293,12 @@ function GameScreen({ form, onBack }) {
 
 function MenuScreen({ onSelect }) {
   return (
-    <div className='contenido'>
+    <div className='container text-warning uppercase'>
       <h1 className='gameTitle'>Selecciona las formas verbales que quieres practicar</h1>
-      <div>
-        <button onClick={() => onSelect('infinitive')}>Infinitivos</button>
-        <button onClick={() => onSelect('present-past')}>Presente & Pasado</button>
-        <button onClick={() => onSelect('mix')}>Mix</button>
+      <div className='d-flex justify-content-center'>
+        <button className='btn btn-dark mx-1' onClick={() => onSelect('infinitive')}>Infinitivos</button>
+        <button className='btn btn-dark mx-1' onClick={() => onSelect('present-past')}>Presente & Pasado</button>
+        <button className='btn btn-dark mx-1' onClick={() => onSelect('mix')}>Mix</button>
       </div>
     </div>
   );
