@@ -2,6 +2,7 @@ import { useState } from 'react'
 import logo from './logo.svg';
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import alambre from './assets/alambre-sm.jpg';
 
 const verbos = [
   { num: 1, inf: "arise", present: "arise", past: "arose", spanish: "surgir" },
@@ -309,7 +310,7 @@ function App() {
   const handleBackForm = () => setFormSetting(null);
 
   return (
-    <div className={formSetting ? 'folio-background' : 'libreta-background'} >
+    <div className={formSetting ? 'folio-background shadow' : 'libreta-background'} >
       {!formSetting ? (
         <MenuScreen onSelect={handleFormSetting} />
       ) : (

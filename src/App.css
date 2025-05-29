@@ -1,7 +1,9 @@
-body {
+.custom-body {
   margin: 0;
   padding: 0;
-  background-color: burlywood;
+  background-image: url(assets/background.avif);
+  background-repeat: no-repeat;
+  background-size: cover;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -30,7 +32,7 @@ main {
 }
 
 .libreta-background {
-  background-image: url(assets/folio_lineas.jpg);
+  background-image: url(assets/portada.jpg);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
