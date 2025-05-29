@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import logo from './logo.svg';
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const verbos = [
   { num: 1, inf: "arise", present: "arise", past: "arose", spanish: "surgir" },
@@ -143,12 +144,12 @@ function Game01({ arrVerbos = [], toGuess = ["inf", "present", "past"] }) {
     }
   }
   return (
-    <>
-      <table border={1}>
+    <div className='game01'>
+      <table className='table'>
         <thead>
           <tr>
             {toGuess.map((formaVerbal) => (
-              <th>{formaVerbal}</th>
+              <th className='bg-transparent'>{formaVerbal}</th>
             ))}
           </tr>
         </thead>
@@ -157,26 +158,17 @@ function Game01({ arrVerbos = [], toGuess = ["inf", "present", "past"] }) {
           {arrVerbos.map((verbo, index) =>
           (<tr key={verbo['num']}>
             {toGuess.map((formaVerbal) => (
-              <td key={formaVerbal}>
+              <td className='bg-transparent' key={formaVerbal}>
                 {toGuess.indexOf(formaVerbal) == 0 ? verbo[formaVerbal] :
-                  (<input type='text' onBlur={(event) => handleResponse(event, index, formaVerbal)}></input>)}
+                  (<input className="form-control form-control-sm" type='text' onBlur={(event) => handleResponse(event, index, formaVerbal)}></input>)}
               </td>
             ))}
           </tr>))
           }
         </tbody>
       </table>
-    </>
+    </div>
   );
-}
-
-function shuffleArray(array, formaVerbal, shuffled = []) {
-  while (true) {
-    let rand = Math.floor(Math.random() * array.length);
-    if (!shuffled.includes(array[rand][formaVerbal])) {
-      return (array[rand]);
-    }
-  }
 }
 
 function getVerbForm(arrVerbos = [], formasVerbales = []) {
@@ -212,50 +204,58 @@ function Game02({ arrVerbos = [], toGuess = ["spanish", "inf", "present", "past"
     response[formaVerbal] = verbo[formaVerbal];
     arrEvents.push(event);
     if (Object.values(response).length == toGuess.length) {
-      arrEvents.map((value)=> value.target.style.background = isCorrect(arrVerbos, response, toGuess) ? 'lightgreen' : 'red');
+      arrEvents.map((value) => value.target.style.background = isCorrect(arrVerbos, response, toGuess) ? 'lightgreen' : 'red');
       response = {};
       arrEvents = [];
     }
   }
 
-  let shuffled = [];
+  const used = [];
   return (
-    <table border={1}>
-      <thead>
-        <tr>
-          {toGuess.map((formaVerbal) => (
-            <th key={formaVerbal}>{formaVerbal}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {
-          arrVerbos.map((_, index) => {
-            return (<tr>
-              {toGuess.map((formaVerbal) => {
-                const verbo = shuffleArray(arrVerbos, formaVerbal, shuffled);
-                shuffled.push(verbo[formaVerbal]);
-                return (<td key={verbo['num'] + verbo[formaVerbal]}>
-                  <button onClick={(event) => handleResponse(event, verbo, formaVerbal)} value={verbo[formaVerbal]}>{verbo[formaVerbal]}</button>
-                </td>
-                );
-              })
-              }
-            </tr>
-            )
-          })
-        }
-      </tbody>
-    </table>
+    <div className='game02'>
+      <table className='table'>
+        <thead>
+          <tr>
+            {toGuess.map((formaVerbal) => (
+              <th className='bg-transparent' key={formaVerbal}>{formaVerbal}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {
+            arrVerbos.map((_, index) => {
+              return (<tr>
+                {toGuess.map((formaVerbal) => {
+                  let verbo = null;
+                  do {
+                    verbo = arrVerbos[Math.floor(Math.random() * arrVerbos.length)];
+                    let aux = verbo['num'] + '-' + formaVerbal;
+                    console.log(aux);
+                  } while (used.includes(verbo['num'] + '-' + formaVerbal));
+                  used.push(verbo['num'] + '-' + formaVerbal);
+                  console.log(used);
+                  return (<td className='bg-transparent' key={verbo['num'] + verbo[formaVerbal]}>
+                    <button className="btn  btn-outline-primary btn-sm" onClick={(event) => handleResponse(event, verbo, formaVerbal)} value={verbo[formaVerbal]}>{verbo[formaVerbal]}</button>
+                  </td>
+                  );
+                })
+                }
+              </tr>
+              )
+            })
+          }
+        </tbody>
+      </table>
+    </div>
   );
 }
 
 function GameHeader({ onChangeMinigame, onRestart, onBack }) {
   return (
-    <div>
-      <button onClick={() => onChangeMinigame()}>Cambiar Minijuego</button>
-      <button onClick={() => onRestart()}>Reiniciar</button>
-      <button onClick={() => onBack(null)}>Volver al Menú</button>
+    <div className='gameHeader'>
+      <button className="btn btn-primary btn-sm my-1" onClick={() => onChangeMinigame()}>Cambiar Minijuego</button>
+      <button className="btn btn-secondary btn-sm my-1" onClick={() => onRestart()}>Reiniciar</button>
+      <button className="btn btn-danger btn-sm my-1" onClick={() => onBack(null)}>Volver al Menú</button>
     </div>
   );
 }
@@ -282,24 +282,24 @@ function GameScreen({ form, onBack }) {
   }
   let arrVerbos = getVerbForm(getVerbos(), formVerbs);
   return (
-    <>
-      <h1>{form}</h1>
-      <GameHeader onChangeMinigame={handleMinigame} onRestart={handleGameKey} onBack={onBack} />
+    <div className='contenido'>
+      <h1 className='gameTitle'>{form}</h1>
       {(minigame == 1) ? <Game01 arrVerbos={arrVerbos} toGuess={formVerbs} key={gameKey} /> : <Game02 arrVerbos={arrVerbos} toGuess={formVerbs} key={gameKey} />}
-    </>
+      <GameHeader onChangeMinigame={handleMinigame} onRestart={handleGameKey} onBack={onBack} />
+    </div>
   );
 }
 
 function MenuScreen({ onSelect }) {
   return (
-    <>
-      <h1>Selecciona las formas verbales que quieres practicar</h1>
+    <div className='contenido'>
+      <h1 className='gameTitle'>Selecciona las formas verbales que quieres practicar</h1>
       <div>
         <button onClick={() => onSelect('infinitive')}>Infinitivos</button>
         <button onClick={() => onSelect('present-past')}>Presente & Pasado</button>
-        <button onClick={() => onSelect('mix')}>Turbo Remix Edition: Electric Boogaloo</button>
+        <button onClick={() => onSelect('mix')}>Mix</button>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -309,13 +309,13 @@ function App() {
   const handleBackForm = () => setFormSetting(null);
 
   return (
-    <>
+    <div className={formSetting ? 'folio-background' : 'libreta-background'} >
       {!formSetting ? (
         <MenuScreen onSelect={handleFormSetting} />
       ) : (
         <GameScreen form={formSetting} onBack={handleBackForm} />
       )}
-    </>
+    </div>
   );
 }
 
