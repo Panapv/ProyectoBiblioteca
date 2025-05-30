@@ -149,7 +149,7 @@ function Game01({ arrVerbos = [], toGuess = ["spanish", "inf", "pastsimple", "pa
         <thead>
           <tr>
             {toGuess.map((formaVerbal) => (
-              <th className='bg-transparent'>{formaVerbal}</th>
+              <th className='bg-transparent'>{translate(formaVerbal)}</th>
             ))}
           </tr>
         </thead>
@@ -171,7 +171,7 @@ function Game01({ arrVerbos = [], toGuess = ["spanish", "inf", "pastsimple", "pa
   );
 }
 
-function getRealString(str = '') {
+function translate(str = '') {
   switch (str) {
     case 'spanish':
       return 'Castellano';
@@ -179,6 +179,12 @@ function getRealString(str = '') {
       return 'Pasado Simple';
     case 'pastparticle':
       return 'Participio';
+    case 'inf':
+      return 'Infinitivo';
+    case 'past':
+      return 'Simple & Participio';
+    case 'mix':
+      return 'MIX';
   }
 }
 
@@ -186,8 +192,8 @@ function invert(arr) {
   let spanish_i = arr.indexOf('spanish');
   let inf_i = arr.indexOf('inf');
 
-  if(spanish_i > -1) arr[spanish_i] = 'inf';
-  if(inf_i > -1) arr[inf_i] = 'spanish';
+  if (spanish_i > -1) arr[spanish_i] = 'inf';
+  if (inf_i > -1) arr[inf_i] = 'spanish';
   console.log(arr);
   return arr;
 }
@@ -238,7 +244,7 @@ function Game02({ arrVerbos = [], toGuess = ["spanish", "inf", "pastsimple", "pa
         <thead>
           <tr>
             {toGuess.map((formaVerbal) => (
-              <th className='bg-transparent' key={formaVerbal}>{formaVerbal}</th>
+              <th className='bg-transparent' key={formaVerbal}>{translate(formaVerbal)}</th>
             ))}
           </tr>
         </thead>
@@ -289,7 +295,7 @@ function GameScreen({ form, onBack }) {
   let formVerbs;
 
   switch (form) {
-    case 'infinitive':
+    case 'inf':
       formVerbs = ['spanish', 'inf'];
       break;
     case 'past':
@@ -315,7 +321,7 @@ function GameScreen({ form, onBack }) {
 
   return (
     <div className='contenido'>
-      <h1 className='gameTitle'>{form}</h1>
+      <h1 className='gameTitle'>{translate(form)}</h1>
       {game}
       <GameHeader onChangeMinigame={handleMinigame} onRestart={handleGameKey} onBack={onBack} />
     </div>
@@ -327,7 +333,7 @@ function MenuScreen({ onSelect }) {
     <div className='container text-warning uppercase'>
       <h1 className='gameTitle'>Selecciona las formas verbales que quieres practicar</h1>
       <div className='d-flex justify-content-center'>
-        <button className='btn btn-dark mx-1' onClick={() => onSelect('infinitive')}>Infinitivos</button>
+        <button className='btn btn-dark mx-1' onClick={() => onSelect('inf')}>Infinitivos</button>
         <button className='btn btn-dark mx-1' onClick={() => onSelect('past')}>Pasado simple y participio</button>
         <button className='btn btn-dark mx-1' onClick={() => onSelect('mix')}>Mix</button>
       </div>

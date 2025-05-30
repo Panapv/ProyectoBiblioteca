@@ -54,8 +54,7 @@ main {
 
 .gameTitle {
   text-align: center;
-  margin-top: 1.25em;
-  margin-bottom: 1em;
+  margin-top: 0.75em;
   text-transform: uppercase;
 }
 
@@ -71,6 +70,7 @@ main {
   margin-left: 0.25em;
   padding-top: 0.9em;
   text-align: justify;
+  height: 60%;
 }
 
 .game01 table {
@@ -78,23 +78,33 @@ main {
   border-collapse: separate;
   border-spacing: 10px 0.1em;
   margin: 0 auto;
+  table-layout: fixed;
+}
+
+.game01 table thead tr th{
+  text-align: justify;
 }
 
 .game01 table tbody tr td input {
   border: 0px;
-  width: 50%;
+  max-width: 8em;
+  text-align: center;
 }
 
 .game02 {
   margin-left: 0.25em;
+  padding-top: 0.9em;
+  text-align: justify;
+  height: 60%;
 }
 
 .game02 table {
   width: 100%;
   margin: 0 auto;
   border-collapse: separate;
-  border-spacing: 0 1em;
+  border-spacing: 0 0;
   text-align: center;
+  table-layout: fixed;
 }
 
 .gameHeader{
