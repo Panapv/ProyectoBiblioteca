@@ -18,21 +18,21 @@ main {
 }
 
 .folio-background {
-  background-image: url(assets/folio_lineas.jpg);
+  background-image: url(assets/folio_lineas.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 
   height: 90%;
   width: auto;
-  aspect-ratio: 1 / 1.414;
+  aspect-ratio: 1 / 1.311;
   display: flex;
   flex-direction: column;
   padding: 0.5em;
 }
 
 .libreta-background {
-  background-image: url(assets/portada.jpg);
+  background-image: url(assets/portada.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -46,7 +46,7 @@ main {
 }
 
 .contenido {
-  width: 82%;
+  width: 77%;
   height: 100%;
   align-self: flex-end;
   box-sizing: border-box;
@@ -56,6 +56,10 @@ main {
   text-align: center;
   margin-top: 0.75em;
   text-transform: uppercase;
+  width: 30%;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
 }
 
 .explication {
@@ -67,10 +71,12 @@ main {
 }
 
 .game01 {
-  margin-left: 0.25em;
   padding-top: 0.9em;
   text-align: justify;
   height: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .game01 table {
@@ -91,11 +97,25 @@ main {
   text-align: center;
 }
 
+.solution{
+  visibility: hidden;
+  color: rgb(29, 170, 29);
+  font-weight: bold;
+}
+
+.btn-solution{
+  margin-top: 1em;
+  margin-right: 1em;
+}
+
 .game02 {
   margin-left: 0.25em;
   padding-top: 0.9em;
   text-align: justify;
   height: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .game02 table {
