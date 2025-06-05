@@ -1,9 +1,7 @@
 import { useRef, useState } from 'react'
-import logo from './logo.svg';
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import verbos from './verbos';
-import alambre from './assets/alambre.jpg';
 
 function getVerbos(n = 5, prev = []) {
   let arr = [];
@@ -31,7 +29,7 @@ function Game01({ arrVerbos = [], toGuess = ["spanish", "inf", "pastsimple", "pa
   }
   return (
     <div className='game01'>
-      <div className='texto text-danger'>Escribe o infinitivo correspondente en {translate(toGuess[0])}</div>
+      <div className='texto text-danger'>Escribe a forma correspondente de cada verbo.</div>
       <table className='table'>
         <thead>
           <tr>
