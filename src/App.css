@@ -134,3 +134,9 @@ main {
   margin-top: 2em;
   margin-right: 1em;
 }
+.texto{
+  text-align: center;
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 1.25em;
+}

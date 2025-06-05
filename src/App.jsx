@@ -31,6 +31,7 @@ function Game01({ arrVerbos = [], toGuess = ["spanish", "inf", "pastsimple", "pa
   }
   return (
     <div className='game01'>
+      <div className='texto text-danger'>Escribe o infinitivo correspondente en {translate(toGuess[0])}</div>
       <table className='table'>
         <thead>
           <tr>
@@ -66,13 +67,13 @@ function Game01({ arrVerbos = [], toGuess = ["spanish", "inf", "pastsimple", "pa
 function translate(str = '') {
   switch (str) {
     case 'spanish':
-      return 'Castellano';
+      return 'Infinitivo Castellano';
     case 'pastsimple':
       return 'Pasado Simple';
     case 'pastparticle':
       return 'Participio';
     case 'inf':
-      return 'Infinitivos';
+      return 'Infinitivo Inglés';
     case 'past':
       return 'Simple & Participio';
     case 'mix':
@@ -138,6 +139,7 @@ function Game02({ arrVerbos = [], toGuess = ["spanish", "inf", "pastsimple", "pa
   const used = [];
   return (
     <div className='game02'>
+      <div className='texto text-danger'>Emparella o as distintas formas verbais cas suas compañeiras premando o botón en cada columna.</div>
       <table className='table'>
         <thead>
           <tr>
